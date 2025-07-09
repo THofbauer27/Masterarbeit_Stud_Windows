@@ -1,0 +1,2 @@
+{"user_id": "Tester2", "timestamp": "2025-07-09T11:45:55.501706Z", "event": "click", "x": 1528, "y": 140, "button": "Button.left", "url": "https://www.google.com/"}
+{"user_id": "Tester2", "timestamp": "2025-07-09T11:45:55.554204Z", "event": "release", "x": 1528, "y": 140, "button": "Button.left", "url": "https://www.google.com/"}

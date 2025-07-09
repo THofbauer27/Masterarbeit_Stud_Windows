@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📝 Logs prüfen</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+    .header h2 { margin: 0; font-size: 1.5rem; color: #333; }
+    #submitBtn { background-color: #4CAF50; color: white; border: none; padding: 10px 20px; font-size: 14px; cursor: pointer; border-radius: 4px; }
+    #submitBtn:hover { background-color: #45a049; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 10px; }
+    .tabs button { background-color: #007acc; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+    .tabs button.active { background-color: #005fa3; }
+    .tab { display: none; }
+    .tab.active { display: block; }
+    #searchInput { margin-top: 10px; padding: 8px 12px; width: 100%; max-width: 300px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background-color: white; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+    th, td { padding: 10px; text-align: left; }
+    th { background-color: #f2f2f2; color: #555; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    tr:hover { background-color: #f1f1f1; }
+    .delete-btn { cursor: pointer; color: #e53935; font-size: 18px; }
+    .delete-btn:hover { color: #b71c1c; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2>📝 Logübersicht</h2>
+    <button id="submitBtn" onclick="submitLogs()">🚀 Logs abschicken</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tabBtn active" data-tab="keylogTab">Tastatureingaben</button>
+    <button class="tabBtn" data-tab="mouselogTab">Mausaktionen</button>
+  </div>
+
+  <div id="keylogTab" class="tab active">
+    <input type="text" id="searchInput" placeholder="🔍 Nach Wort suchen..." oninput="filterLogs()" />
+    <table id="logTable">
+      <thead>
+        <tr>
+          <th>Löschen</th>
+          <th>User ID</th>
+          <th>Uhrzeit</th>
+          <th>Wort</th>
+          <th>URL</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="mouselogTab" class="tab">
+    <table id="mouseTable">
+      <thead>
+        <tr>
+          <th>User ID</th>
+          <th>Uhrzeit</th>
+          <th>Typ</th>
+          <th>Position</th>
+          <th>Details</th>
+          <th>URL</th>
+          <th>Löschen</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  
+  <script>
+  let logs = [], mouseLogs = [];
+
+  function formatToLocalTime(ts) {
+    return new Date(ts).toLocaleString("de-DE", { timeZone: "Europe/Berlin" });
+  }
+
+  function loadLogs() {
+    fetch("keylog.jsonl").then(res => res.text()).then(text => {
+      logs = text.trim().split("\n").map(line => JSON.parse(line));
+      renderLogs();
+    });
+    fetch("mouselog.jsonl").then(res => res.text()).then(text => {
+      mouseLogs = text.trim().split("\n").map(line => JSON.parse(line));
+      renderMouseLogs();
+    });
+  }
+
+  function renderLogs() {
+    const tbody = document.querySelector("#logTable tbody");
+    tbody.innerHTML = "";
+    logs.forEach((entry, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td><span class="delete-btn" onclick="deleteEntry(${index})">🗑️</span></td>
+        <td>${entry.user_id}</td>
+        <td>${formatToLocalTime(entry.timestamp)}</td>
+        <td>${entry.word}</td>
+        <td>${entry.url}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  function renderMouseLogs() {
+    const tbody = document.querySelector("#mouseTable tbody");
+    tbody.innerHTML = "";
+    mouseLogs.forEach((entry, index) => {
+      const details = entry.event === "scroll" ? `Δx=${entry.dx}, Δy=${entry.dy}` : entry.button || "";
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${entry.user_id || ""}</td>
+        <td>${formatToLocalTime(entry.timestamp)}</td>
+        <td>${entry.event}</td>
+        <td>${entry.x}, ${entry.y}</td>
+        <td>${details}</td>
+        <td>${entry.url}</td>
+        <td><span class="delete-btn" onclick="deleteMouseEntry(${index})">🗑️</span></td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  function deleteEntry(index) {
+    logs.splice(index, 1);
+    renderLogs();
+  }
+
+  function deleteMouseEntry(index) {
+    mouseLogs.splice(index, 1);
+    renderMouseLogs();
+  }
+
+  function filterLogs() {
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    const tbody = document.querySelector("#logTable tbody");
+    tbody.innerHTML = "";
+    logs.forEach((entry, index) => {
+      if (entry.word.toLowerCase().includes(searchTerm)) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><span class="delete-btn" onclick="deleteEntry(${index})">🗑️</span></td>
+          <td>${entry.user_id}</td>
+          <td>${formatToLocalTime(entry.timestamp)}</td>
+          <td>${entry.word}</td>
+          <td>${entry.url}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    });
+  }
+
+  function submitLogs() {
+    const keylogPayload = logs.map(e => ({
+      user_id: e.user_id,
+      url: e.url,
+      content: e.word,
+      timestamp: e.timestamp  // 🟢 korrekt übermittelt
+    }));
+
+    const mouselogPayload = mouseLogs.map(e => ({
+      user_id: e.user_id,
+      url: e.url,
+      event: e.event,
+      x: e.x,
+      y: e.y,
+      dx: e.dx,
+      dy: e.dy,
+      button: e.button,
+      timestamp: e.timestamp  // 🟢 korrekt übermittelt
+    }));
+
+    const SERVER = "http://rinfmiwebgw2.uni-regensburg.de";
+
+    Promise.all([
+      fetch(`${SERVER}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(keylogPayload)
+      }),
+      fetch(`${SERVER}/submit-mouse`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(mouselogPayload)
+      })
+    ])
+    .then(() => {
+      alert("✅ Logs erfolgreich abgeschickt.");
+      window.electronAPI.writeLogs([]);
+      window.electronAPI.writeMouseLogs([]);
+      logs = [];
+      mouseLogs = [];
+      renderLogs();
+      renderMouseLogs();
+    })
+    .catch(err => {
+      console.error(err);
+      alert("❌ Fehler beim Abschicken.");
+    });
+  }
+
+  document.querySelectorAll(".tabBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tabBtn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  window.onload = loadLogs;
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
