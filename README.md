@@ -16,13 +16,13 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 
 
-1\. \*\*Windows 10 oder 11\*\*
+1\.**Windows 10 oder 11**
 
-2\. \*\*Python ab Version 3.10\*\*  
+2\.**Python ab Version 3.10**  
 
 &nbsp;  → Muss als System-App installiert sein (`python` im Terminal ausführbar)
 
-3\. \*\*Node.js (mind. Version 18)\*\*  
+3\.**Node.js (mind. Version 18)**  
 
 &nbsp;  → Muss im PATH verfügbar sein (`node -v` und `npm -v` im Terminal ausführbar)
 
@@ -36,13 +36,13 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 
 
-1\. \*\*Projekt herunterladen\*\*  
+1\.**Projekt herunterladen**  
 
 &nbsp;  Lade das gesamte Projekt (z. B. ZIP-Datei) herunter und entpacke es an einen beliebigen Ort (z. B. Desktop).
 
 
 
-2\. \*\*Setup starten\*\*  
+2\. **Setup starten**  
 
 &nbsp;  Führe die Datei `setup_and_start.bat` mit Doppelklick aus.  
 
@@ -64,7 +64,7 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 
 
-\- \*\*Starte den Browser mit Keylogger:\*\*  
+\- **Starte den Browser mit Keylogger:**  
 
 &nbsp; Doppelklick auf `start_browser.bat`
 
@@ -82,11 +82,11 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 
 
-\- \*\*Fenster werden automatisch minimiert\*\* (Keylogger etc.)
+\- **Fenster werden automatisch minimiert** (Keylogger etc.)
 
-\- \*\*Beim Schließen des Browsers\*\* wird der Keylogger automatisch beendet.
+\- **Beim Schließen des Browsers** wird der Keylogger automatisch beendet.
 
-\- \*\*Es werden keine persönlichen Daten gespeichert.\*\*
+\- **Es werden keine persönlichen Daten gespeichert.**
 
 
 
@@ -100,7 +100,7 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 | Problem | Lösung |
 
-|--------|--------|
+
 
 | `python` wird nicht erkannt | Stelle sicher, dass Python installiert ist und in den Umgebungsvariablen (`PATH`) verfügbar ist |
 
