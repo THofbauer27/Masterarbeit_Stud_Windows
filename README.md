@@ -94,21 +94,14 @@ Dieses Projekt enthält einen logging-fähigen Browser zur Untersuchung des Info
 
 
 
-## ❓ Häufige Probleme
+❓ Häufige Probleme  
 
-
-
-| Problem | Lösung |
-
-
-
-| `python` wird nicht erkannt | Stelle sicher, dass Python installiert ist und in den Umgebungsvariablen (`PATH`) verfügbar ist |
-
-| Fenster bleiben offen | Stelle sicher, dass nur diese Version des Browsers verwendet wird. Anderen Python-Prozesse könnten stören |
-
-| Keylogger wird nicht beendet | Starte `start\_browser.bat` nicht mehrfach. Nur ein Fenster gleichzeitig nutzen |
-
-
+| Problem                          | Lösung                                                                 |
+|----------------------------------|------------------------------------------------------------------------|
+| `python3` wird nicht erkannt     | Stelle sicher, dass Python installiert ist und im PATH verfügbar ist   |
+| `node` oder `npm` fehlen         | Installiere Node.js z. B. mit `brew install node`                      |
+| Fenster bleiben offen            | Stelle sicher, dass nur diese Version des Browsers verwendet wird.    |
+| Keylogger wird nicht beendet     | Starte `start_all.sh` nicht mehrfach. Nur ein Fenster gleichzeitig nutzen |
 
 ---
 
